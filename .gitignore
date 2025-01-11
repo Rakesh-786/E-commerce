@@ -1,0 +1,37 @@
+# Ignore environment files
+backend/.env
+client/.env
+
+# Ignore node_modules folders
+backend/node_modules/
+client/node_modules/
+
+# Ignore package lock files (optional)
+backend/package-lock.json
+client/package-lock.json
+
+# Ignore IDE/editor folders
+client/.vscode/
+
+# Ignore dump files
+bash.exe.stackdump
+
+# Ignore compiled/build output
+client/dist/
+client/build/
+
+# Ignore log files
+*.log
+npm-debug.log*
+
+# Ignore json data files
+login.json
+merchant.json
+product.json
+register.json
+user.json
+
+# Ignore config files (optional)
+client/angular.json
+client/package.json
+client/tsconfig*.json

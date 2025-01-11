@@ -1,0 +1,30 @@
+.rating {
+  display: inline-flex;
+  
+  .star {
+    font-size: 1rem;
+    
+    &.full {
+      color: var(--warning-color);
+    }
+    
+    &.half {
+      position: relative;
+      color: var(--warning-color);
+      
+      &::after {
+        content: '★';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 50%;
+        overflow: hidden;
+        color: var(--warning-color);
+      }
+    }
+    
+    &.empty {
+      color: var(--border-color);
+    }
+  }
+}

@@ -1,0 +1,5 @@
+<div class="rating">
+  <span *ngFor="let star of fullStars" class="star full">★</span>
+  <span *ngIf="hasHalfStar" class="star half">★</span>
+  <span *ngFor="let star of emptyStars" class="star empty">★</span>
+</div>

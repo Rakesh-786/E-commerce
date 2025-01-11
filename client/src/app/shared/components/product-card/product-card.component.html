@@ -1,0 +1,41 @@
+<div class="product-card">
+  <a [routerLink]="['/products', product._id]" class="product-link">
+    <div class="product-image-container">
+      <img [src]="getPrimaryImageUrl()" [alt]="product.name" class="product-image">
+      <div *ngIf="product.discountPrice" class="discount-badge">
+        {{ ((product.price - product.discountPrice) / product.price * 100) | number:'1.0-0' }}% OFF
+      </div>
+      <div *ngIf="!getInStockStatus()" class="out-of-stock-badge">
+        Out of Stock
+      </div>
+    </div>
+
+    <div class="product-info">
+      <h3 class="product-name">{{ product.name }}</h3>
+
+      <div class="product-rating">
+        <app-rating [rating]="product.rating.average"></app-rating>
+        <span class="review-count">({{ product.rating.count }})</span>
+      </div>
+
+      <div class="product-price">
+        <span *ngIf="product.discountPrice" class="original-price">${{ product.price }}</span>
+        <span class="current-price">${{ product.discountPrice || product.price }}</span>
+      </div>
+
+      <p class="product-description">{{ product.description | slice:0:80 }}...</p>
+
+      <div class="merchant-info">
+        <small>by {{ product.merchant.merchantInfo.businessName || (product.merchant.firstName + ' ' + product.merchant.lastName) }}</small>
+      </div>
+
+      <app-button
+        [disabled]="!getInStockStatus()"
+        (click)="onAddToCart($event)"
+        [variant]="getInStockStatus() ? 'primary' : 'disabled'"
+        [fullWidth]="true">
+        {{ getInStockStatus() ? 'Add to Cart' : 'Out of Stock' }}
+      </app-button>
+    </div>
+  </a>
+</div>

@@ -1,0 +1,303 @@
+<div class="register-container">
+    <div class="register-card">
+        <h1 class="register-title">
+            <i class="register-icon"></i> Create Account
+        </h1>
+
+        <!-- Step 1: Account Type Selection -->
+        <div *ngIf="currentStep === 1" class="account-type-selection">
+            <div class="step-indicator">
+                <div class="step active">
+                    <span class="step-number">1</span>
+                    <span class="step-label">Select Account Type</span>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <span class="step-label">Verify Access</span>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <span class="step-label">Enter Details</span>
+                </div>
+            </div>
+
+            <h2 class="section-title">Select Account Type</h2>
+
+            <div class="account-types">
+                <div class="account-type" [class.selected]="accountType === 'customer'"
+                    (click)="selectAccountType('customer')">
+                    <div class="account-type-icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <h3>Customer</h3>
+                    <p>Shop products, track orders, and manage your shopping experience.</p>
+                    <div class="account-features">
+                        <span class="feature">✓ Browse & Purchase Products</span>
+                        <span class="feature">✓ Order Tracking</span>
+                        <span class="feature">✓ Wishlist & Reviews</span>
+                    </div>
+                </div>
+
+                <div class="account-type" [class.selected]="accountType === 'merchant'"
+                    (click)="selectAccountType('merchant')">
+                    <div class="account-type-icon">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <h3>Merchant</h3>
+                    <p>Sell products, manage inventory, and grow your business.</p>
+                    <div class="account-features">
+                        <span class="feature">✓ Sell Products</span>
+                        <span class="feature">✓ Inventory Management</span>
+                        <span class="feature">✓ Sales Analytics</span>
+                    </div>
+                </div>
+
+                <div class="account-type" [class.selected]="accountType === 'administrator'"
+                    (click)="selectAccountType('administrator')">
+                    <div class="account-type-icon">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <h3>Administrator</h3>
+                    <p>Manage users, merchants, products, and oversee platform operations.</p>
+                    <div class="account-features">
+                        <span class="feature">✓ User Management</span>
+                        <span class="feature">✓ Platform Analytics</span>
+                        <span class="feature">✓ System Configuration</span>
+                    </div>
+                    <div class="admin-notice">
+                        <i class="fa-solid fa-info-circle"></i>
+                        <span>Requires special access code</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Type Confirmation -->
+            <div *ngIf="accountType" class="account-confirmation">
+                <div class="confirmation-card">
+                    <div class="confirmation-icon">
+                        <i [class]="getAccountTypeIcon()"></i>
+                    </div>
+                    <h3>Creating {{ getAccountTypeLabel() }} Account</h3>
+                    <p>{{ getAccountTypeDescription() }}</p>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button class="continue-button" [disabled]="!accountType" (click)="nextStep()">
+                    {{ accountType === 'administrator' ? 'VERIFY ACCESS' : 'CONTINUE' }}
+                </button>
+            </div>
+
+            <div class="login-link">
+                Already have an account? <a routerLink="/auth/login">Login</a>
+            </div>
+        </div>
+
+        <!-- Step 2: Admin Code Verification (for administrators only) -->
+        <div *ngIf="currentStep === 2 && accountType === 'administrator'" class="admin-verification">
+            <div class="step-indicator">
+                <div class="step completed">
+                    <span class="step-number">1</span>
+                    <span class="step-label">Select Account Type</span>
+                </div>
+                <div class="step active">
+                    <span class="step-number">2</span>
+                    <span class="step-label">Verify Access</span>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <span class="step-label">Enter Details</span>
+                </div>
+            </div>
+
+            <div class="verification-content">
+                <div class="verification-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h2 class="section-title">Administrator Access Verification</h2>
+                <p class="verification-description">
+                    Administrator accounts require special authorization. Please enter the admin access code provided by
+                    your system administrator.
+                </p>
+
+                <form [formGroup]="adminCodeForm" class="admin-code-form">
+                    <div class="form-group">
+                        <label for="adminCode">Admin Access Code *</label>
+                        <div class="input-container">
+                            <input [type]="showAdminCode ? 'text' : 'password'" id="adminCode"
+                                formControlName="adminCode" placeholder="Enter admin access code"
+                                [ngClass]="{'is-invalid': adminCodeForm.get('adminCode')?.invalid && adminCodeForm.get('adminCode')?.touched}">
+                            <i class="password-toggle"
+                                [class]="showAdminCode ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"
+                                (click)="toggleAdminCodeVisibility()"></i>
+                        </div>
+                        <div class="error-message"
+                            *ngIf="adminCodeForm.get('adminCode')?.invalid && adminCodeForm.get('adminCode')?.touched">
+                            <span *ngIf="adminCodeForm.get('adminCode')?.errors?.['required']">Admin code is
+                                required</span>
+                            <span *ngIf="adminCodeForm.get('adminCode')?.errors?.['minlength']">Admin code must be at
+                                least 8 characters</span>
+                        </div>
+                    </div>
+
+                    <div class="error-message" *ngIf="adminCodeError">
+                        {{ adminCodeError }}
+                    </div>
+
+                    <div class="admin-code-info">
+                        <div class="info-item">
+                            <i class="fa-solid fa-key"></i>
+                            <span>Contact your system administrator for the access code</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>This code ensures only authorized personnel can create admin accounts</span>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="navigation-buttons">
+                    <button type="button" class="back-button" (click)="previousStep()">BACK</button>
+                    <button type="button" class="verify-button" [disabled]="adminCodeForm.invalid || isVerifyingCode"
+                        (click)="verifyAdminCode()">
+                        {{ isVerifyingCode ? 'VERIFYING...' : 'VERIFY CODE' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Account Details (or Step 2 for non-admin accounts) -->
+        <div *ngIf="(currentStep === 3) || (currentStep === 2 && accountType !== 'administrator')"
+            class="account-details">
+            <div class="step-indicator">
+                <div class="step completed">
+                    <span class="step-number">1</span>
+                    <span class="step-label">Select Account Type</span>
+                </div>
+                <div class="step" [class.completed]="accountType === 'administrator'"
+                    [class.active]="accountType !== 'administrator'">
+                    <span class="step-number">2</span>
+                    <span class="step-label">{{ accountType === 'administrator' ? 'Verify Access' : 'Enter Details'
+                        }}</span>
+                </div>
+                <div *ngIf="accountType === 'administrator'" class="step active">
+                    <span class="step-number">3</span>
+                    <span class="step-label">Enter Details</span>
+                </div>
+            </div>
+
+            <!-- Account Type Summary -->
+            <div class="account-summary">
+                <div class="summary-card">
+                    <div class="summary-icon">
+                        <i [class]="getAccountTypeIcon()"></i>
+                    </div>
+                    <div class="summary-content">
+                        <h3>{{ getAccountTypeLabel() }} Account</h3>
+                        <p>{{ getAccountTypeDescription() }}</p>
+                    </div>
+                    <div class="summary-status">
+                        <i class="fa-solid fa-check-circle"></i>
+                        <span>Verified</span>
+                    </div>
+                </div>
+            </div>
+
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" formControlName="firstName"
+                            placeholder="Enter your first name"
+                            [ngClass]="{'is-invalid': registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched}">
+                        <div class="error-message"
+                            *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+                            <span *ngIf="registerForm.get('firstName')?.errors?.['required']">First name is
+                                required</span>
+                            <span *ngIf="registerForm.get('firstName')?.errors?.['minlength']">First name must be at
+                                least 2 characters</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" formControlName="lastName" placeholder="Enter your last name"
+                            [ngClass]="{'is-invalid': registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched}">
+                        <div class="error-message"
+                            *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+                            <span *ngIf="registerForm.get('lastName')?.errors?.['required']">Last name is
+                                required</span>
+                            <span *ngIf="registerForm.get('lastName')?.errors?.['minlength']">Last name must be at least
+                                2 characters</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" formControlName="email" placeholder="Enter your email"
+                        [ngClass]="{'is-invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}">
+                    <div class="error-message"
+                        *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                        <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
+                        <span *ngIf="registerForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password *</label>
+                    <div class="input-container">
+                        <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
+                            placeholder="Create a password"
+                            [ngClass]="{'is-invalid': registerForm.get('password')?.invalid && registerForm.get('password')?.touched}">
+                        <i class="password-toggle" [class]="showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"
+                            (click)="togglePasswordVisibility()"></i>
+                    </div>
+                    <div class="error-message"
+                        *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+                        <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</span>
+                        <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 6
+                            characters</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone (Optional)</label>
+                    <input type="tel" id="phone" formControlName="phone" placeholder="Enter your phone number">
+                </div>
+
+                <!-- Merchant-specific fields -->
+                <div *ngIf="accountType === 'merchant'" class="merchant-fields">
+                    <div class="form-group">
+                        <label for="businessName">Business Name *</label>
+                        <input type="text" id="businessName" formControlName="businessName"
+                            placeholder="Enter your business name"
+                            [ngClass]="{'is-invalid': registerForm.get('businessName')?.invalid && registerForm.get('businessName')?.touched}">
+                        <div class="error-message"
+                            *ngIf="registerForm.get('businessName')?.invalid && registerForm.get('businessName')?.touched">
+                            <span *ngIf="registerForm.get('businessName')?.errors?.['required']">Business name is
+                                required</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessDescription">Business Description (Optional)</label>
+                        <textarea id="businessDescription" formControlName="businessDescription"
+                            placeholder="Describe your business" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="error-message" *ngIf="errorMessage">
+                    {{ errorMessage }}
+                </div>
+
+                <div class="navigation-buttons">
+                    <button type="button" class="back-button" (click)="previousStep()">BACK</button>
+                    <button type="submit" class="create-account-button" [disabled]="registerForm.invalid || isLoading">
+                        CREATE ACCOUNT
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

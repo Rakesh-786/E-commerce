@@ -1,0 +1,223 @@
+<!-- Top Bar -->
+<div class="top-bar">
+    <div class="container">
+        <div class="top-bar-content">
+            <div class="top-bar-left">
+                <app-svg-icon name="shipping" size="16px" class="promo-icon"></app-svg-icon>
+                <span class="promo-text">Free shipping on orders over $50</span>
+                <span class="divider">|</span>
+                <app-svg-icon name="support" size="16px" class="support-icon"></app-svg-icon>
+                <span class="support">24/7 Customer Support</span>
+            </div>
+            <div class="top-bar-right">
+                <a href="#" class="top-link">
+                    <app-svg-icon name="track" size="16px"></app-svg-icon>
+                    Track Order
+                </a>
+                <span class="divider">|</span>
+                <a href="#" class="top-link">
+                    <app-svg-icon name="help" size="16px"></app-svg-icon>
+                    Help
+                </a>
+                <span class="divider">|</span>
+                <select class="language-selector">
+                    <option value="en">🇺🇸 EN</option>
+                    <option value="es">🇪🇸 ES</option>
+                    <option value="fr">🇫🇷 FR</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Header -->
+<header class="main-header" [class.scrolled]="isScrolled">
+    <div class="container">
+        <div class="header-content">
+            <!-- Logo -->
+            <div class="logo">
+                <a routerLink="/" class="logo-link">
+                    <app-svg-icon name="shop" size="32px" class="logo-icon"></app-svg-icon>
+                    <span class="logo-text">MarketMingle</span>
+                </a>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-section">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Search for products, brands, and more..."
+                        [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" (input)="onSearchInput()">
+                    <button class="search-btn" (click)="onSearch()">
+                        <app-svg-icon name="search" size="20px" class="search-icon"></app-svg-icon>
+                    </button>
+
+                    <!-- Search Suggestions -->
+                    <div class="search-suggestions" *ngIf="showSuggestions && suggestions.length > 0">
+                        <div *ngFor="let suggestion of suggestions" class="suggestion-item"
+                            (click)="selectSuggestion(suggestion)">
+                            <app-svg-icon name="search" size="16px" class="suggestion-icon"></app-svg-icon>
+                            <span>{{ suggestion }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Actions -->
+            <div class="user-actions">
+                <!-- Account / Register -->
+                <div class="action-item account-dropdown">
+                    <!-- For non-authenticated users: Show Register button -->
+                    <a *ngIf="!currentUser" routerLink="/auth/register" class="action-btn">
+                        <app-svg-icon name="account" size="20px" class="icon"></app-svg-icon>
+                        <span class="action-text">Register</span>
+                    </a>
+
+                    <!-- For authenticated users: Show Account dropdown -->
+                    <div *ngIf="currentUser">
+                        <button class="action-btn" (click)="toggleAccountMenu()">
+                            <app-svg-icon name="account" size="20px" class="icon"></app-svg-icon>
+                            <span class="action-text">Account</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div class="dropdown-menu" *ngIf="showAccountMenu">
+                            <div class="dropdown-header">
+                                <div class="user-info">
+                                    <div class="user-avatar">{{ currentUser.firstName.charAt(0) }}{{
+                                        currentUser.lastName.charAt(0) }}</div>
+                                    <div class="user-details">
+                                        <div class="user-name">{{ currentUser.firstName }} {{ currentUser.lastName }}
+                                        </div>
+                                        <div class="user-email">{{ currentUser.email }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown-items">
+                                <!-- Authenticated user options -->
+                                <a routerLink="/profile" class="dropdown-item" (click)="closeAccountMenu()">
+                                    <app-svg-icon name="account" size="16px" class="item-icon"></app-svg-icon>
+                                    <span>My Profile</span>
+                                </a>
+                                <a routerLink="/orders" class="dropdown-item" (click)="closeAccountMenu()">
+                                    <app-svg-icon name="track" size="16px" class="item-icon"></app-svg-icon>
+                                    <span>My Orders</span>
+                                </a>
+                                <a routerLink="/wishlist" class="dropdown-item" (click)="closeAccountMenu()">
+                                    <app-svg-icon name="heart" size="16px" class="item-icon"></app-svg-icon>
+                                    <span>My Wishlist</span>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <button class="dropdown-item logout-btn" (click)="logout()">
+                                    <app-svg-icon name="account" size="16px" class="item-icon"></app-svg-icon>
+                                    <span>Sign Out</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wishlist -->
+                <div class="action-item">
+                    <a routerLink="/wishlist" class="action-btn">
+                        <div class="icon-wrapper">
+                            <app-svg-icon name="heart" size="20px" class="icon"></app-svg-icon>
+                            <span class="badge" *ngIf="wishlistCount > 0">{{ wishlistCount }}</span>
+                        </div>
+                        <span class="action-text">Wishlist</span>
+                    </a>
+                </div>
+
+                <!-- Cart -->
+                <div class="action-item">
+                    <a routerLink="/cart" class="action-btn cart-btn">
+                        <div class="icon-wrapper">
+                            <app-svg-icon name="cart" size="20px" class="icon"></app-svg-icon>
+                            <span class="badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+                        </div>
+                        <div class="cart-info">
+                            <span class="action-text">Cart</span>
+                            <span class="cart-total" *ngIf="cartTotal > 0">{{ cartTotal | currencyFormat }}</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" (click)="toggleMobileMenu()">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Navigation Menu -->
+<nav class="main-nav">
+    <div class="container">
+        <div class="nav-content">
+            <!-- Categories Menu -->
+            <div class="categories-menu">
+                <button class="categories-btn" (click)="toggleCategoriesMenu()">
+                    <app-svg-icon name="menu" size="18px" class="menu-icon"></app-svg-icon>
+                    <span>All Categories</span>
+                    <span class="dropdown-arrow">▼</span>
+                </button>
+                <div class="mega-menu" *ngIf="showCategoriesMenu">
+                    <div class="mega-menu-content">
+                        <div class="category-column" *ngFor="let category of categories">
+                            <h3 class="category-title">
+                                <app-svg-icon [name]="category.icon" size="18px" class="category-icon"></app-svg-icon>
+                                {{ category.name }}
+                            </h3>
+                            <ul class="subcategory-list">
+                                <li *ngFor="let subcategory of category.subcategories">
+                                    <a [routerLink]="['/products']" [queryParams]="{category: subcategory.slug}">
+                                        {{ subcategory.name }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Navigation Links -->
+            <ul class="nav-links">
+                <li class="nav-item">
+                    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                        <app-svg-icon name="home" size="18px" class="nav-icon"></app-svg-icon>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="/products" routerLinkActive="active">
+                        <app-svg-icon name="shop" size="18px" class="nav-icon"></app-svg-icon>
+                        <span>Shop</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="/deals" routerLinkActive="active">
+                        <app-svg-icon name="fire" size="18px" class="nav-icon"></app-svg-icon>
+                        <span>Deals</span>
+                        <span class="sale-badge">Sale</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="/brands" routerLinkActive="active">
+                        <app-svg-icon name="star" size="18px" class="nav-icon"></app-svg-icon>
+                        <span>Brands</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Right Side Actions -->
+            <div class="nav-actions">
+                <a routerLink="/compare" class="nav-action">
+                    <app-svg-icon name="compare" size="18px" class="action-icon"></app-svg-icon>
+                    <span>Compare</span>
+                    <span class="badge" *ngIf="compareCount > 0">{{ compareCount }}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

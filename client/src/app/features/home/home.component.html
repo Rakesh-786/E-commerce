@@ -1,0 +1,247 @@
+<div class="home-page">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="promo-tag">
+            <span>🏷️ UP TO 15% OFF</span>
+          </div>
+          <h1>Discover Your Perfect Style</h1>
+          <p>Explore our curated collection of premium fashion items designed for the modern lifestyle.</p>
+          <a routerLink="/shop" class="btn-shop-now">
+            SHOP NOW <i class="fa-solid fa-arrow-right"></i>
+          </a>
+          <div class="trending-products">
+            <i class="fa-solid fa-shopping-cart"></i> Trending Products
+          </div>
+        </div>
+        <div class="hero-image">
+          <img [src]="heroImage" alt="Fashion model">
+          <div class="image-badge new-arrivals">New Arrivals</div>
+          <div class="image-badge premium-quality">Premium Quality</div>
+          <div class="image-badge free-shipping">Free Shipping</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="categories-section">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <h2>
+          <app-svg-icon name="menu" size="24px" style="color: red; display: inline-block;"></app-svg-icon>
+          Shop by Category
+        </h2>
+        <a routerLink="/categories" class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="categories-grid">
+        <a routerLink="/categories/electronics" class="category-card" data-aos="zoom-in" data-aos-delay="100">
+          <div class="category-image">
+            <img [src]="categoryImages.electronics" alt="Electronics">
+            <div class="category-overlay">
+              <app-svg-icon name="electronics" size="40px"></app-svg-icon>
+            </div>
+            <div class="category-icon-main">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="#667eea">
+                <!-- Monitor/Computer icon -->
+                <path
+                  d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z" />
+              </svg>
+            </div>
+          </div>
+          <div class="category-content">
+            <h3>Electronics</h3>
+            <span class="category-items">248 items</span>
+          </div>
+        </a>
+
+        <a routerLink="/categories/fashion" class="category-card" data-aos="zoom-in" data-aos-delay="200">
+          <div class="category-image">
+            <img [src]="categoryImages.fashion" alt="Fashion">
+            <div class="category-overlay">
+              <app-svg-icon name="fashion" size="40px"></app-svg-icon>
+            </div>
+            <div class="category-icon-main">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="#667eea">
+                <!-- T-shirt icon -->
+                <path d="M16 4l-4-2-4 2v2l-2 2v12h12V8l-2-2V4zm-4 16H8V10l2-2h4l2 2v10h-4z" />
+              </svg>
+            </div>
+          </div>
+          <div class="category-content">
+            <h3>Fashion</h3>
+            <span class="category-items">356 items</span>
+          </div>
+        </a>
+
+        <a routerLink="/categories/home" class="category-card" data-aos="zoom-in" data-aos-delay="300">
+          <div class="category-image home-kitchen-bg">
+            <div class="category-overlay">
+              <app-svg-icon name="home-kitchen" size="40px"></app-svg-icon>
+            </div>
+            <div class="category-icon-main">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="#667eea">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+              </svg>
+            </div>
+          </div>
+          <div class="category-content">
+            <h3>Home & Kitchen</h3>
+            <span class="category-items">157 items</span>
+          </div>
+        </a>
+
+        <a routerLink="/categories/beauty" class="category-card" data-aos="zoom-in" data-aos-delay="400">
+          <div class="category-image">
+            <img [src]="categoryImages.beauty" alt="Beauty">
+            <div class="category-overlay">
+              <app-svg-icon name="beauty" size="40px"></app-svg-icon>
+            </div>
+            <div class="category-icon-main">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="#667eea">
+                <!-- Lipstick/Beauty icon -->
+                <path
+                  d="M9 11H7v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9h-2a4 4 0 0 1-8 0zM12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a1 1 0 0 1 1 1v1a6 6 0 0 1-12 0V8a1 1 0 0 1 1-1h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z" />
+              </svg>
+            </div>
+          </div>
+          <div class="category-content">
+            <h3>Beauty</h3>
+            <span class="category-items">189 items</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products Section -->
+  <section class="featured-products-section">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <h2><i class="fa-solid fa-star"></i> Featured Products</h2>
+        <a routerLink="/products" class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="products-grid">
+        <app-product-card *ngFor="let product of featuredProducts; let i = index" [product]="product"
+          (addToCart)="addToCart($event)" data-aos="fade-up" [attr.data-aos-delay]="i * 100">
+        </app-product-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Promo Banner -->
+  <section class="promo-banner" data-aos="zoom-in">
+    <div class="container">
+      <div class="promo-content">
+        <div class="promo-text">
+          <span class="promo-badge"><i class="fa-solid fa-bolt"></i> Limited Time</span>
+          <h2>Summer Sale</h2>
+          <p>Up to 50% off on selected items. Limited time offer.</p>
+          <a routerLink="/deals" class="btn-shop-deals">
+            <i class="fa-solid fa-shopping-cart"></i> Shop Deals
+          </a>
+          <div class="countdown-timer">
+            <div class="timer-item">
+              <span class="time">2</span>
+              <span class="label">Days</span>
+            </div>
+            <div class="timer-item">
+              <span class="time">18</span>
+              <span class="label">Hours</span>
+            </div>
+            <div class="timer-item">
+              <span class="time">45</span>
+              <span class="label">Mins</span>
+            </div>
+            <div class="timer-item">
+              <span class="time">30</span>
+              <span class="label">Secs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="benefits-section">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <h2><i class="fa-solid fa-check-circle"></i> Why Choose Us</h2>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="benefit-icon">
+            <i class="fa-solid fa-truck-fast"></i>
+          </div>
+          <h3>Free Shipping</h3>
+          <p>On orders over $50</p>
+        </div>
+
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="benefit-icon">
+            <i class="fa-solid fa-medal"></i>
+          </div>
+          <h3>Quality Guarantee</h3>
+          <p>100% satisfaction</p>
+        </div>
+
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="benefit-icon">
+            <i class="fa-solid fa-shield-alt"></i>
+          </div>
+          <h3>Secure Payments</h3>
+          <p>Multiple payment options</p>
+        </div>
+
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="400">
+          <div class="benefit-icon">
+            <i class="fa-solid fa-headset"></i>
+          </div>
+          <h3>24/7 Support</h3>
+          <p>Dedicated customer service</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="newsletter-section" data-aos="fade-up">
+    <div class="container">
+      <div class="newsletter-content">
+        <div class="newsletter-icon">
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+        <h2>Subscribe to Our Newsletter</h2>
+        <p>Get the latest updates on new products and upcoming sales</p>
+        <form class="newsletter-form">
+          <div class="input-group">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input type="email" placeholder="Your email address" required>
+          </div>
+          <button type="submit">
+            <i class="fa-solid fa-paper-plane"></i> Subscribe
+          </button>
+        </form>
+        <div class="newsletter-benefits">
+          <div class="benefit-item">
+            <i class="fa-solid fa-gift"></i>
+            <span>Exclusive Offers</span>
+          </div>
+          <div class="benefit-item">
+            <i class="fa-solid fa-tag"></i>
+            <span>Special Discounts</span>
+          </div>
+          <div class="benefit-item">
+            <i class="fa-solid fa-bell"></i>
+            <span>New Arrivals</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
